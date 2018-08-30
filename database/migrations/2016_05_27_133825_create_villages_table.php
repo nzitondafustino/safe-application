@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStationTable extends Migration
+class CreateVillagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,16 @@ class CreateStationTable extends Migration
      */
     public function up()
     {
-        Schema::create('Station', function (Blueprint $table) {
+        Schema::create('villages', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('cell_id')->unsigned();
             $table->string('name');
             $table->timestamps();
 
-            $table->unique('name');
+            
+            $table->foreign('cell_id')   ->  references('id')    ->  on('cells')
+                                                                ->  onDelete('restrict')
+                                                                ->  onUpdate('cascade');
         });
     }
 
@@ -29,6 +33,6 @@ class CreateStationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Station');
+        Schema::dropIfExists('villages');
     }
 }

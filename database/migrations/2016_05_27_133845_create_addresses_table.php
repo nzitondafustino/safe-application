@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAddressTable extends Migration
+class CreateAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,29 +13,29 @@ class CreateAddressTable extends Migration
      */
     public function up()
     {
-        Schema::create('Address', function (Blueprint $table) {
+        Schema::create('adresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('proviceId')->unsigned();
-            $table->integer('districtId')->unsigned();
-            $table->integer('sectorId')->unsigned();
-            $table->integer('cellId')->unsigned();
-            $table->integer('villageId')->unsigned();
+            $table->integer('provice_id')->unsigned();
+            $table->integer('district_id')->unsigned();
+            $table->integer('sector_id')->unsigned();
+            $table->integer('cell_id')->unsigned();
+            $table->integer('village_id')->unsigned();
             $table->timestamps();
 
             
-            $table->foreign('proviceId')   ->  references('id') ->  on('Province')
+            $table->foreign('provice_id')   ->  references('id') ->  on('provinces')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('districtId')   ->  references('id')->  on('District')
+            $table->foreign('district_id')   ->  references('id')->  on('districts')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('sectorId')   ->  references('id')  ->  on('Sector')
+            $table->foreign('sector_id')   ->  references('id')  ->  on('sectors')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('cellId')   ->  references('id')    ->  on('Cell')
+            $table->foreign('cell_id')   ->  references('id')    ->  on('cells')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('villageId')   ->  references('id')    ->  on('Village')
+            $table->foreign('village_id')   ->  references('id')    ->  on('villages')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
         });
@@ -48,6 +48,6 @@ class CreateAddressTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Address');
+        Schema::dropIfExists('addresses');
     }
 }

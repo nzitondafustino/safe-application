@@ -13,13 +13,13 @@ class CreateSectorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Sector', function (Blueprint $table) {
+        Schema::create('sectors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('districtId')->unsigned();
+            $table->integer('district_id')->unsigned();
             $table->string('name');
             $table->timestamps();
             
-            $table->foreign('districtId')   ->  references('id')    ->  on('District')
+            $table->foreign('district_id')   ->  references('id')    ->  on('districts')
                                                                     ->  onDelete('restrict')
                                                                     ->  onUpdate('cascade');
         });
@@ -32,6 +32,6 @@ class CreateSectorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Sectors');
+        Schema::dropIfExists('sectors');
     }
 }

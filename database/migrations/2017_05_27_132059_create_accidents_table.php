@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIdentificationTable extends Migration
+class CreateAccidentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,24 @@ class CreateIdentificationTable extends Migration
      */
     public function up()
     {
-        Schema::create('Identification', function (Blueprint $table) {
+        Schema::create('accidents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('accidentId')->unsigned()->unique();
-            $table->integer('userId')->unsigned();
-            $table->string('type')->unique();
-            
-            $table->string('number')->unique();
-            $table->string('owner');
-            $table->string('category')->nullable();
-            
-            $table->integer('status')->default(1)->comment('1.hold 2.releases');
-            
-            $table->double('amande');
+            $table->integer('address_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->string('comment');
+
+            $table->integer('status')->default(1)->comment('1.active 2.transmitted 3.closed');
+            $table->integer('date');
+
+            $table->integer('dead');
+            $table->integer('injury');
 
             $table->timestamps();
-            $table->foreign('accidentId')  ->  references('id') ->  on('Accident')
+
+            $table->foreign('address_id')   ->  references('id') ->  on('addresses')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('userId')   ->  references('id')    ->  on('User')
+            $table->foreign('user_id')   ->  references('id')    ->  on('users')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
         });
@@ -44,6 +43,6 @@ class CreateIdentificationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Identification');
+        Schema::dropIfExists('accidents');
     }
 }

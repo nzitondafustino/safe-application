@@ -69,8 +69,8 @@ class AccidentController extends Controller
 
         try{
             $accident = Accident::create(array(
-                    'addressId' => $address,
-                    'userId'    => Auth::id(),
+                    'address_id' => $address,
+                    'user_id'    => Auth::id(),
                     'comment'   => $comment,
                     'date'      => strtotime($date),
                     'dead'      => $dead,

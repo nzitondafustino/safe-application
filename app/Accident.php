@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Accident extends Model
 {
     //
-    protected $table = "Accident";
 
     protected $fillable = [
-        'addressId', 'userId', 'comment', 'status', 'date', 'dead', 'injury'
+        'address_id', 'user_id', 'comment', 'status', 'date', 'dead', 'injury'
     ];
 
     protected $dateFormat = 'U';

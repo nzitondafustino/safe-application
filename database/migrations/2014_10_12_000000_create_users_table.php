@@ -13,9 +13,9 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('User', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('stationId')->unsigned();
+            $table->integer('station_id')->unsigned();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->unique();
@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('stationId')    ->  references('id')    ->  on('Station')
+            $table->foreign('station_id')    ->  references('id')    ->  on('Station')
                                                                     ->  onDelete('restrict')
                                                                     ->  onUpdate('cascade');
         });

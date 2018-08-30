@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVehicleTable extends Migration
+class CreateVehiclesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateVehicleTable extends Migration
      */
     public function up()
     {
-        Schema::create('Vehicle', function (Blueprint $table) {
+        Schema::create('vehicles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('accidentId')->unsigned();
-            $table->integer('userId')->unsigned();
+            $table->integer('accident_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('type')->nullable();
             $table->string('mark')->nullable();
             $table->string('category')->nullable();
@@ -29,10 +29,10 @@ class CreateVehicleTable extends Migration
             $table->string('amande')->nullable();
 
             $table->timestamps();
-            $table->foreign('accidentId')  ->  references('id') ->  on('Accident')
+            $table->foreign('accident_id')  ->  references('id') ->  on('accidents')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
-            $table->foreign('userId')   ->  references('id')    ->  on('User')
+            $table->foreign('user_id')   ->  references('id')    ->  on('users')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');
         });
@@ -45,6 +45,6 @@ class CreateVehicleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Vehicle');
+        Schema::dropIfExists('vehicles');
     }
 }
