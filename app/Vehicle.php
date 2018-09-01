@@ -17,4 +17,8 @@ class Vehicle extends Model
 	protected function getDateFormat() {
 	    return 'U';
 	}
+	public function accident()
+	{
+		return $this->belongsTo('App\Accident');
+	}
 }

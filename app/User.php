@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Accident;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -14,6 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $table="users";
     protected $fillable = [
         'station_id', 'name', 'email', 'password', 'phone', 'title', 'type'
     ];
@@ -31,5 +32,9 @@ class User extends Authenticatable
     
     protected function getDateFormat() {
         return 'U';
+    }
+    public function accidents()
+    {
+        return $this->hasMany(Accident::class);
     }
 }

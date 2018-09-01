@@ -30,7 +30,6 @@
 					                <th>Injury</th>
 					                <th>Dead</th>
 					                <th>Vehicles</th>
-					                <th>IDs</th>
 					            </tr>
 					        </thead>
 					        <tbody>
@@ -39,13 +38,12 @@
 					        	?>
 					        	@foreach($accidents as $accident)
 					        		<tr>
-					        			<td>{{$i++}}</td>
+					        			<td>{{$accident->id}}</td>
 					        			<td>{{$accident->date}}</td>
 					        			<td>{{$accident->comment}}</td>
 					        			<td class="text-center"><span class="label label-warning">{{$accident->injury}}</span></a></td>
 					        			<td class="text-center"><span class="label bg-red">{{$accident->dead}}</span></a></td>
-					        			<td class="text-center"><a href="/vehicle/{{ $accident->id }}"><span class="label label-primary">{{$accident->vehicles}}</span></a></td>
-					        			<td class="text-center"><a href="/ids/{{ $accident->id }}"><span class="label label-primary">{{$accident->identification}}</span></a></td>
+					        			<td class="text-center"><a href="/vehicle/{{ $accident->vehicle->id }}"><span class="label label-primary">{{$accident->vehicle->plate}}</span></a></td>
 					        		</tr>
 					        	@endforeach
 					        </tbody>
