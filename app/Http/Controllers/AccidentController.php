@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers;
+<?php 
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
@@ -6,6 +7,7 @@ use DB;
 use Exception;
 use Auth;
 use App\Accident;
+use App\Province;
 
 class AccidentController extends Controller
 {
@@ -27,28 +29,8 @@ class AccidentController extends Controller
     public function create()
     {
         //get the list of available address
-        $address = DB::select("SELECT   a.id AS id,
-                                        CONCAT( b.name, ' - ',
-                                                c.name, ' - ',
-                                                d.name, ' - ',
-                                                e.name, ' - ',
-                                                f.name
-                                        ) AS name
-                                        FROM Address AS a
-                                        INNER JOIN Province AS b
-                                            ON a.proviceId = b.id
-                                        INNER JOIN District AS c
-                                            ON a.districtId = c.id
-                                        INNER JOIN Sector AS d
-                                            ON a.sectorId = d.id
-                                        INNER JOIN Cell AS e
-                                            ON a.cellId = e.id
-                                        INNER JOIN Village AS f
-                                            ON a.villageId = f.id
-                                      ");
-        return view('adminlte::accident.create')
-                                            ->with('address', $address);
-                                            ;
+        $provinces=Province::all();
+        return view('adminlte::accident.create',compact("provinces",$provinces));
     }
 
     /**
@@ -63,13 +45,13 @@ class AccidentController extends Controller
         $date = $request->datepicker;
         //var_dump($date);
         $comment =$request->comment;
-        $address = $request->address;
+        // $address = $request->address;
         $dead = $request->dead;
         $injury = $request->injury;
 
         try{
             $accident = Accident::create(array(
-                    'address_id' => $address,
+                    'address_id' => 20,
                     'user_id'    => Auth::id(),
                     'comment'   => $comment,
                     'date'      => strtotime($date),
@@ -77,7 +59,7 @@ class AccidentController extends Controller
                     'injury'    => $injury
                 ));
             if($accident){
-                return redirect("/home");
+                return view('adminlte::vehicle.create')->withAccident($accident);
             }
         } catch(Exception $e){
             
@@ -97,7 +79,8 @@ class AccidentController extends Controller
      */
     public function show($id)
     {
-        //
+        $accident=Accident::find($id);
+        return view('adminlte::accident.show')->with('accident',$accident);
     }
 
     /**
@@ -108,7 +91,9 @@ class AccidentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $accident=Accident::find($id);
+        $provinces=Province::all();
+        return view('adminlte::accident.edit',["accident"=>$accident,'provinces'=>$provinces]);
     }
 
     /**
@@ -120,7 +105,13 @@ class AccidentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $accident=Accident::find($id);
+        $accident->comment=$request->comment;
+        $accident->date=$request->date;
+        $accident->dead=$request->dead;
+        $accident->injury=$request->injury;
+        $accident->update();
+        return redirect('/home');
     }
 
     /**

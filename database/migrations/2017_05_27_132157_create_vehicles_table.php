@@ -19,10 +19,11 @@ class CreateVehiclesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('type')->nullable();
             $table->string('mark')->nullable();
-            $table->string('category')->nullable();
             $table->string('plate')->nullable();
             $table->string('shasis')->nullable();
             $table->string('owner')->nullable();
+            $table->string('ownerId')->nullable();
+            $table->string('ownerLicence')->nullable();
 
             $table->integer('status')->default(1)->comment('1.hold 2.released 3.transfered');
             

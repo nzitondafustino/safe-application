@@ -112,13 +112,13 @@
 					<div class="box-body">
 						<div class="row">
 											
-					        <div class="col-md-4 col-sm-6 col-xs-12">
+					        <div class="col-md-3 col-sm-6 col-xs-12">
 					          <div class="info-box bg-aqua">
 					            <span class="info-box-icon"><i class="fa fa-car"></i></span>
 
 					            <div class="info-box-content">
 					              <span class="info-box-text">Cars</span>
-					              <span class="info-box-number" id="cars">{{$cars}} <span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=3&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
+					              <span class="info-box-number" id="cars">{{$cars}} <span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=1&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
 
 
 					              <div class="progress">
@@ -139,7 +139,7 @@
 					          <!-- /.info-box -->
 					        </div>
 					        <!-- /.col -->
-					        <div class="col-md-4 col-sm-6 col-xs-12">
+					        <div class="col-md-3 col-sm-6 col-xs-12">
 					          <div class="info-box bg-green">
 					            <span class="info-box-icon"><i class="fa fa-motorcycle"></i></span>
 
@@ -159,7 +159,7 @@
 					          <!-- /.info-box -->
 					        </div>
 					        <!-- /.col -->
-					        <div class="col-md-4 col-sm-6 col-xs-12">
+					        <div class="col-md-3 col-sm-6 col-xs-12">
 					          <div class="info-box bg-yellow">
 					            <span class="info-box-icon"><i class="fa fa-bicycle"></i></span>
 
@@ -177,6 +177,10 @@
 					            <!-- /.info-box-content -->
 					          </div>
 					          <!-- /.info-box -->
+					        </div>
+					        <div class="col-md-3">
+					        	<a class="btn btn-primary" href="/reports/print/2?type=4&startdate={{$startDate}}&enddate={{$endDate}}">Generate  Vehicles Report</a>
+
 					        </div>
 					        <!-- /.col -->
 						</div>
@@ -244,6 +248,10 @@
 					            </a>
 					          </div>
 					        </div>
+					         <div class="col-lg-3">
+					          <a class="btn btn-primary" href="/reports/print/3?type=4&startdate={{$startDate}}&enddate={{$endDate}}">Generate Documents Report</a>
+					      </div>
+
 					        <!-- ./col -->
 					      
 					    </div>

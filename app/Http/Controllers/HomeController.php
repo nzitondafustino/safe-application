@@ -39,6 +39,7 @@ class HomeController extends Controller
     {
         // get all accidents to display to home view
         $accidents=Accident::all();
+        // dd($accidents);
         return view('adminlte::home')->withAccidents($accidents);
     }
 }

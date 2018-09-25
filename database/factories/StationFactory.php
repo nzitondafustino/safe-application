@@ -1,6 +1,5 @@
 <?php
 use App\Station;
-use App\Role;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -13,19 +12,9 @@ use App\Role;
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    static $password;
+$factory->define(Station::class, function (Faker\Generator $faker) {
 
     return [
-    	'station_id'=>function(){
-            return Station::all()->random();
-        },
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'phone' =>$faker->phoneNumber,
-        'title'=>'corporal',
-        'type'=>1,
-        'password' => bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'name' => $faker->word.$faker->randomNumber($nbDigits = NULL)
     ];
 });

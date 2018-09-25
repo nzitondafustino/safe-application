@@ -22,7 +22,6 @@ class LoginController extends Controller
     use AuthenticatesUsers {
         attemptLogin as attemptLoginAtAuthenticatesUsers;
     }
-
     /**
      * Show the application's login form.
      *

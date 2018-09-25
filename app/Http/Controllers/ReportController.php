@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use DB;
 use Exception;
 use Auth;
+use App\Accident;
+use App\User;
+use App\Vehicle;
+use App\ID;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -17,93 +22,41 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
-        $station = DB::select("SELECT   a.stationId AS stationId
-                                        FROM User AS a
-                                        WHERE a.id = ?
-                                        ", array(Auth::id()) );
+        $accidents=Accident::all();
+        $totalAccident=$accidents->count();
+        $user=User::find(Auth::id());
+        $station=$user->station;
         $startDate  = strtotime(date("Y-m-01", time() ));
         $endDate    = time();
-        $accidentSummary = DB::select("SELECT   COUNT(a.id) AS totalAccident
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId));
-        $injurySummary = DB::select("SELECT COALESCE(SUM(a.injury), 0) AS totalInjury
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId));
-        $deadSummary = DB::select("SELECT   COALESCE(SUM(a.dead),0) AS totalDead
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId));
-        $holdCars = DB::select("SELECT  COUNT(a.id) AS totalCar
-                                        FROM Accident AS a
-                                        INNER JOIN User AS b
-                                        ON a.userId = b.id
-                                        INNER JOIN Vehicle AS c
-                                        ON a.id = c.accidentId
-                                        WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                        ", array($startDate, $endDate, $station[0]->stationId, 1, 1));
-        
-        $holdMotocycle = DB::select("SELECT COUNT(a.id) AS totalMotocycle
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Vehicle AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 2));
-
-        $holdBicycle = DB::select("SELECT   COUNT(a.id) AS totalBicycle
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Vehicle AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 3));
-        $holdLicense = DB::select("SELECT   COUNT(a.id) AS totalLicense
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Identification AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 1));
-        
-        $holdMatriculation = DB::select("SELECT COUNT(a.id) AS totalMatriculation
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                INNER JOIN Identification AS c
-                                                ON a.id = c.accidentId
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId, 1, 2));
-
-        $holdInsurance = DB::select("SELECT     COUNT(a.id) AS totalInsurance
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                INNER JOIN Identification AS c
-                                                ON a.id = c.accidentId
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId, 1, 3));
-        
-        return view('adminlte::report.show')->with('accidents',$accidentSummary[0]->totalAccident)
-                                            ->with('injury',$injurySummary[0]->totalInjury)
-                                            ->with('dead',$deadSummary[0]->totalDead)
-                                            ->with('cars',$holdCars[0]->totalCar)
-                                            ->with('motocycle',$holdMotocycle[0]->totalMotocycle)
-                                            ->with('bicycle',$holdBicycle[0]->totalBicycle)
-                                            ->with('license',$holdLicense[0]->totalLicense)
-                                            ->with('matriculation',$holdMatriculation[0]->totalMatriculation)
-                                            ->with('insurance',$holdInsurance[0]->totalInsurance)
+        $injury=$accidents->sum('injury');
+        $dead=$accidents->sum('dead');
+        $holdCars=Vehicle::where('status',1)
+                        ->where('type',1)
+                        ->get()->count();
+        $holdMotocycle=Vehicle::where('status',1)
+                        ->where('type',2)
+                         ->get()->count();
+        $holdBicycle=Vehicle::where('status',1)
+                        ->where('type',3)
+                         ->get()->count();
+        $holdLicense=ID::where('type',1)
+                           ->get()
+                           ->count();
+        $holdMatriculation=ID::where('type',2)
+                           ->get()
+                           ->count();
+        $holdInsurance=ID::where('type',3)
+                           ->get()
+                           ->count();          
+        return view('adminlte::report.show')->with('accidents',$totalAccident)
+                                            ->with('injury',$injury)
+                                            ->with('dead',$dead)
+                                            ->with('cars',$holdCars)
+                                            ->with('motocycle',$holdMotocycle)
+                                            ->with('bicycle',$holdBicycle)
+                                            ->with('license',$holdLicense)
+                                            ->with('matriculation',$holdMatriculation)
+                                            ->with('insurance',$holdInsurance)
                                             ->with('startDate', date("m/01/Y", time() ))
                                             ->with('endDate', date("m/d/Y", time() ))
                                             ;
@@ -114,154 +67,97 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function report1(Request $request,$reportId)
     {
-        //
-    }
+        $startDate  = strtotime($request->startdate);
+        $endDate    = strtotime($request->enddate);
+        $user=User::find(Auth::id());
+        if($startDate > $endDate){
+            $t = $startDate;
+            $startDate = $endDate;
+            $endDate = $t;
+        }
+      if($reportId==1)
+         {
+          $accidents=Accident::where('user_id',Auth::id())->get();
+          $pdf = PDF::loadHTML(view('adminlte::reports.report1')
+                                    ->with('accidents',$accidents)
+                                    ->with('user',$user)
+                                    ->with('title',"Accident Summary Report")
+                                    ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate))
+                                    );
+            return $pdf->stream('homw.pdf');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+         }
+         elseif($reportId==2)
+         {        
+                  $vehicleType="Car Accident Report";
+                  $vehicles=Vehicle::where('user_id',Auth::id())
+                                                       ->where('type',1)
+                                                       ->get();
+                 if($request->type==2)
+                 {
+                 $vehicles=Vehicle::where('user_id',Auth::id())
+                                                       ->where('type',2)
+                                                       ->get();
+                 $vehicleType="Motocycle Accident Report";
+                 }
+                 elseif($request->type==3)
+                 {
+                  $vehicles=Vehicle::where('user_id',Auth::id())
+                                                       ->where('type',3)
+                                                       ->get();
+                 $vehicleType="Bicycle Accident Report";
+                 }
+                 elseif($request->type==4)
+                 {
+                 $vehicles=Vehicle::where('user_id',Auth::id())
+                                                       ->get();
+                 $vehicleType="Vehicle Accident Report"; 
+                 }
+                 $pdf = PDF::loadHTML(view('adminlte::reports.report2')
+                                 ->with('vehicles',$vehicles)
+                                 ->with('user',$user)
+                                 ->with('title',$vehicleType)
+                                 ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate)));
+                return $pdf->stream('homw.pdf');
+        }
+        elseif($reportId==3)
+                 $title="Licence Summary Report";
+                 $ids=ID::where('user_id',Auth::id())
+                                              ->where('type',1)
+                                              ->get();
+                 if($request->type==2)
+                 {
+                 $title="Immatriculation Summary Report";
+                 $ids=ID::where('user_id',Auth::id())
+                                            ->where('type',2)
+                                            ->get();
+                 }
+                 elseif($request->type==3)
+                 {
+                 $title="Insurance Summary Report";
+                 $ids=ID::where('user_id',Auth::id())
+                                            ->where('type',2)
+                                            ->get();
+                 }
+                 elseif($request->type==4)
+                 {
+                 $title="Documents Summary Report";
+                 $ids=ID::where('user_id',Auth::id())
+                                            ->get();  
+                 }
+                 $pdf = PDF::loadHTML(view('adminlte::reports.report3')
+                                 ->with('ids',$ids)
+                                 ->with('user',$user)
+                                 ->with('title',$title)
+                                 ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate))
+                                 );
+         return $pdf->stream('homw.pdf');
+    }
+    public function generalreport()
     {
-        //
+
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-         $station = DB::select("SELECT   a.stationId AS stationId
-                                        FROM User AS a
-                                        WHERE a.id = ?
-                                        ", array(Auth::id()) );
-        $startDate  = strtotime($_GET['startDate']);
-        $endDate    = strtotime($_GET['endDate']);
-        $accidentSummary = DB::select("SELECT   COUNT(a.id) AS totalAccident
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId));
-        $injurySummary = DB::select("SELECT COALESCE(SUM(a.injury),0) AS totalInjury
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId));
-        $deadSummary = DB::select("SELECT   COALESCE(SUM(a.dead),0) AS totalDead
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId));
-        $holdCars = DB::select("SELECT  COUNT(a.id) AS totalCar
-                                        FROM Accident AS a
-                                        INNER JOIN User AS b
-                                        ON a.userId = b.id
-                                        INNER JOIN Vehicle AS c
-                                        ON a.id = c.accidentId
-                                        WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                        ", array($startDate, $endDate, $station[0]->stationId, 1, 1));
-        
-        $holdMotocycle = DB::select("SELECT COUNT(a.id) AS totalMotocycle
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Vehicle AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 2));
-
-        $holdBicycle = DB::select("SELECT   COUNT(a.id) AS totalBicycle
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Vehicle AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 3));
-        $holdLicense = DB::select("SELECT   COUNT(a.id) AS totalLicense
-                                            FROM Accident AS a
-                                            INNER JOIN User AS b
-                                            ON a.userId = b.id
-                                            INNER JOIN Identification AS c
-                                            ON a.id = c.accidentId
-                                            WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                            ", array($startDate, $endDate, $station[0]->stationId, 1, 1));
-        
-        $holdMatriculation = DB::select("SELECT COUNT(a.id) AS totalMatriculation
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                INNER JOIN Identification AS c
-                                                ON a.id = c.accidentId
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId, 1, 2));
-
-        $holdInsurance = DB::select("SELECT     COUNT(a.id) AS totalInsurance
-                                                FROM Accident AS a
-                                                INNER JOIN User AS b
-                                                ON a.userId = b.id
-                                                INNER JOIN Identification AS c
-                                                ON a.id = c.accidentId
-                                                WHERE a.date >= ? && a.date <= ? && b.stationId = ? && c.status = ? && c.type = ?
-                                                ", array($startDate, $endDate, $station[0]->stationId, 1, 3));
-        
-        return json_encode(array("accidents"        => $accidentSummary[0]->totalAccident, 
-                                 "injury"           => $injurySummary[0]->totalInjury, 
-                                 "dead"             => $deadSummary[0]->totalDead, 
-                                 "cars"             => $holdCars[0]->totalCar, 
-                                 "motocycle"        => $holdMotocycle[0]->totalMotocycle, 
-                                 "bicycle"          => $holdBicycle[0]->totalBicycle, 
-                                 "license"          => $holdLicense[0]->totalLicense, 
-                                 "matriculation"    => $holdMatriculation[0]->totalMatriculation, 
-                                 "insurance"        => $holdInsurance[0]->totalInsurance,
-                                 "startDate"        => $_GET['startDate'],
-                                 "endDate"          => $_GET['endDate']
-                                )
-                            );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+   
 }

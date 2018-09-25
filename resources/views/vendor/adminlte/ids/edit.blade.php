@@ -41,7 +41,8 @@
 				            </div>
 				            <!-- /.box-header -->
 				            <!-- form start -->
-				            <form class="form-horizontal" method="post" action="/ids">
+				            <form class="form-horizontal" method="post" action="{{route('ids.update',$id->id)}}">
+				            	<input type="hidden" name="_method" value="PUT">
 				            	{{ csrf_field() }}
 				            	<input type="hidden" name="accident" value="{{$accident->id}}">
 					              <div class="box-body">
@@ -53,9 +54,9 @@
 						                    <i class="fa fa-id-card-o"></i>
 						                  </div>
 						                    <select class="form-control" id="IdsType" name="IdsType" placeholder="Select Identification Category">
-						                    	<option value="1">Driving License</option>
-						                    	<option value="2">Immatriculation Card</option>
-						                    	<option value="3">Insurance</option>
+						                    	<option {{$id->type==1 ? 'selected' : ''}} value="1">Driving License</option>
+						                    	<option {{$id->type==2 ? 'selected' : ''}} value="2">Immatriculation Card</option>
+						                    	<option {{$id->type==3 ? 'selected' : ''}} value="3">Insurance</option>
 						                    </select>
 					                  </div>
 					                </div>
@@ -67,8 +68,8 @@
 						                    <i class="fa fa-id-card-o"></i>
 						                  </div>
 						                    <select class="form-control" id="IdsType" name="status" placeholder="Select Identification Category">
-						                    	<option value="1">Hold</option>
-						                    	<option value="2">Released</option>
+						                    	<option {{$id->status==1 ? 'selected' : ''}} value="1">Hold</option>
+						                    	<option {{$id->status==2 ? 'selected' : ''}} value="2">Released</option>
 						                    </select>
 					                  </div>
 					                </div>
@@ -79,7 +80,7 @@
 						                  <div class="input-group-addon">
 						                    <i class="glyphicon glyphicon-credit-card"></i>
 						                  </div>
-						                  <input  class="form-control" id="cardNo" name="cardNo" placeholder="Card Number" type='text' />
+						                  <input value="{{$id->number}}"  class="form-control" id="cardNo" name="cardNo" placeholder="Card Number" type='text' />
 					                  </div>
 					                </div>
 					                <div id="dlicense">
@@ -102,7 +103,7 @@
 						                  <div class="input-group-addon">
 						                    <i class="glyphicon glyphicon-user"></i>
 						                  </div>
-						                  <input  class="form-control" id="owner" name="owner" placeholder="Vehicle Owner" type='text' />
+						                  <input value="{{$id->owner}}" class="form-control" id="owner" name="owner" placeholder="Vehicle Owner" type='text' />
 					                  </div>
 					                </div>
 					                <div class="form-group">
@@ -112,7 +113,7 @@
 						                  <div class="input-group-addon">
 						                    <i class="glyphicon glyphicon-usd"></i>
 						                  </div>
-						                  <input  class="form-control" name="amande" id="amande" placeholder="Prescribed Amande" type='text' />
+						                  <input value="{{$id->amande}}"  class="form-control" name="amande" id="amande" placeholder="Prescribed Amande" type='text' />
 					                  </div>
 					                </div>
 					              </div>
@@ -120,7 +121,7 @@
 					              <div class="box-footer">
 					              	<div class="btn-group pull-right">
 					              		<a href="/home" class="pull-left"><button type="button" class="btn btn-default btn-flat">Cancel</button></a>
-					                	<button type="submit" class="btn btn-primary btn-flat">Save & Continue</button>
+					                	<button type="submit" class="btn btn-primary btn-flat">Save Changes</button>
 					              	</div>
 					                
 					              </div>

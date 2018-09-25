@@ -24,7 +24,8 @@
 				            </div>
 				            <!-- /.box-header -->
 				            <!-- form start -->
-				            <form class="form-horizontal" method="post" action="{{route('accident.store')}}">
+				            <form class="form-horizontal" method="POST" action="{{route('accident.update',$accident->id)}}">
+				            	<input type="hidden" name="_method" value="PUT">
 				            	{{ csrf_field() }}
 				              <div class="box-body">
 				              	<div class="form-group">
@@ -33,7 +34,7 @@
 					                  <div class="input-group-addon">
 					                    <i class="fa fa-calendar"></i>
 					                  </div>
-					                  <input class="form-control pull-right" id="datepicker" name="datepicker" type="text" data-provide="datepicker-inline">
+					                  <input class="form-control pull-right" id="datepicker" name="datepicker" type="text" value="{{$accident->date}}" data-provide="datepicker-inline">
 					                </div>
 					                <!-- /.input group -->
 				              	</div>
@@ -89,7 +90,7 @@
 					                  <div class="input-group-addon">
 					                    <i class="glyphicon glyphicon-comment"></i>
 					                  </div>
-					                  <textarea  class="form-control" id="comment" name="comment" placeholder="Comment" rows=3></textarea>
+					                  <textarea  class="form-control" id="comment" name="comment" placeholder="Comment" rows=3>{{$accident->comment}}</textarea>
 				                  </div>
 				                </div>
 				                <div class="form-group">
@@ -99,7 +100,7 @@
 					                  <div class="input-group-addon">
 					                    <i class="fa fa-wheelchair"></i>
 					                  </div>
-					                  <input  class="form-control" id="injury" name="injury" placeholder="Injury People" type='text' />
+					                  <input  class="form-control" value="{{$accident->injury}}" id="injury" name="injury" placeholder="Injury People" type='text' />
 				                  </div>
 				                </div>
 				                <div class="form-group">
@@ -109,7 +110,7 @@
 					                  <div class="input-group-addon">
 					                    <i class="fa fa-deafness"></i>
 					                  </div>
-					                  <input  class="form-control" name="dead" id="dead" placeholder="Dead People" type='text' />
+					                  <input  class="form-control" value="{{$accident->dead}}" name="dead" id="dead" placeholder="Dead People" type='text' />
 				                  </div>
 				                </div>
 				              </div>
@@ -117,7 +118,7 @@
 				              <div class="box-footer">
 				              	<div class="btn-group pull-right">
 				              		<a href="/home" class="pull-left btn btn-primary">Cancel</a>
-				              		<button type="submit" class="btn btn-success">Save & Continue</button>
+				              		<button type="submit" class="btn btn-success">Save Changes</button>
 				              	</div>
 				                
 				              </div>

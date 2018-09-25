@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use User;
+use App\User;
 use Vehicle;
+use ID;
 
 class Accident extends Model
 {
@@ -24,8 +25,12 @@ class Accident extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
-	public function vehicle()
+	public function vehicles()
 	{
-		 return $this->hasOne('App\Vehicle');
+		 return $this->hasMany('App\Vehicle');
+	}
+	public function identifications()
+	{
+		return $this->hasMany('App\ID');
 	}
 }

@@ -1,5 +1,5 @@
 <h2>
-	{{$station[0]->name}} Police Station<br />
+	{{$user->station->name}} Police Station<br />
 	{{$title}}<br />
 	{{$date}}<br />
 </h2>
@@ -31,5 +31,5 @@
     </tbody>
 </table>
 <br />
-Done at <b>{{$station[0]->name}}</b> on <b>{{date('Y-m-d')}}</b><br />
-By <b>{{$station[0]->user}}</b><br />
+Done at <b>{{$user->station->name}}</b> on <b>{{date('Y-m-d')}}</b><br />
+By <b>{{$user->name}}</b><br />
