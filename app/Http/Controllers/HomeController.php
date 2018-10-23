@@ -37,8 +37,24 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $accidents;
         // get all accidents to display to home view
-        $accidents=Accident::all();
+        if(Auth::user()->hasRole('user'))
+        {
+        $accidents=Accident::where('user_id',Auth::id());
+        }
+        elseif(Auth::user()->hasRole('district-admin'))
+        {
+         $accidents=Accident::where('district_id',Auth::id());  
+        }
+         elseif(Auth::user()->hasRole('province-admin'))
+        {
+         $accidents=Accident::where('province_id',Auth::id());  
+        }
+         elseif(Auth::user()->hasRole('overall-admin'))
+        {
+         $accidents=Accident::all();  
+        }
         // dd($accidents);
         return view('adminlte::home')->withAccidents($accidents);
     }

@@ -3,9 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use District;
-use Cell;
-use Address;
+use App\District;
+use App\Cell;
+use App\Address;
+use App\Accident;
 class Sector extends Model
 {
     public function district()
@@ -16,8 +17,8 @@ class Sector extends Model
     {
     	return $this->hasMany(Cell::class);
     }
-     public function addresses()
+     public function accidents()
     {
-    	return $this->hasMany(Address::class);
+        return $this->hasMany(Accident::class);
     }
 }

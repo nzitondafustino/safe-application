@@ -29,7 +29,10 @@ class VehicleController extends Controller
      */
     public function create(Request $request)
     {
-        $accidentId=$request->id;
+        if(!$accidentId=$request->id)
+         {
+            return redirect()->back();
+         }
         $accident=Accident::find($accidentId);
         return view('adminlte::vehicle.create')->withAccident($accident);
     }
@@ -42,6 +45,19 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'accident'      =>'required|digits:1',
+            'vehicleType'      =>'required|digits:1',
+            'status'        =>'required|digits:1',
+            'mark'       =>'required|alpha',
+            'plate'    =>'required|alpha_num',
+            'chasis'          =>'required|alpha_num',
+            'owner'        =>'required|string',
+            'ownerLicence'        =>'required|digits_between:1,20',
+            'ownerId'        =>'required|digits:15',
+            'amande'        =>'required|digits_between:1,10',
+
+        ]);
         $accidentId=$request->accident;
         $accident=Accident::find($accidentId);
         $vehicle=new Vehicle();
@@ -104,6 +120,19 @@ class VehicleController extends Controller
      */
     public function update(Request $request, $id)
     {
+         $this->validate($request,[
+            'accident'      =>'required|digits:1',
+            'vehicleType'      =>'required|digits:1',
+            'status'        =>'required|digits:1',
+            'mark'       =>'required|alpha',
+            'plate'    =>'required|alpha_num',
+            'chasis'          =>'required|alpha_num',
+            'owner'        =>'required|string',
+            'ownerLicence'        =>'required|digits_between:1,20',
+            'ownerId'        =>'required|digits:15',
+            'amande'        =>'required|digits_between:1,10',
+
+        ]);
         $vehicle=Vehicle::find($id);
         $vehicle->type=$request->vehicleType;
         $vehicle->status=$request->status;
@@ -115,7 +144,7 @@ class VehicleController extends Controller
         $vehicle->ownerId=$request->ownerId;
         $vehicle->amande=$request->amande;
         $vehicle->update();
-        return redirect()->route('vehicle.show',$id);
+        return redirect('/home');
     }
 
     /**

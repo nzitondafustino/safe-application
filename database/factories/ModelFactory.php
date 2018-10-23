@@ -1,6 +1,8 @@
 <?php
 use App\Station;
 use App\Role;
+use App\District;
+use App\Province;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -20,11 +22,18 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     	'station_id'=>function(){
             return Station::all()->random();
         },
+        'district_id'=>function()
+        {
+            return District::all()->random();
+        },
+        'province_id'=>function()
+        {
+            return Province::all()->random();
+        },
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'phone' =>$faker->phoneNumber,
         'title'=>'corporal',
-        'type'=>1,
         'password' => bcrypt('secret'),
         'remember_token' => str_random(10),
     ];

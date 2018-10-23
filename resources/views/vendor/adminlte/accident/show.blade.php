@@ -20,9 +20,11 @@
 				              <div class="btn-group pull-right">
 				                    <a href="/home"><button type="button" class="btn btn-block btn-primary btn-flat">Home</button></a>
 				              </div>
-				              <h1 class="box-title">{{$accident->comment}}</h1><br />
-				              <h1 class="box-title">{{$accident->address}}</h1><br />
-				              <h1 class="box-title">{{$accident->date}}</h1><br />
+				               <h1 class="box-title">Comment:{{$accident->comment}}</h1><br />
+				              <h1 class="box-title">Province:{{$accident->province->name}}</h1><br />
+				              <h1 class="box-title">District:{{$accident->district->name}}</h1><br />
+				              <h1 class="box-title">Sector:{{$accident->sector->name}}</h1><br />
+				              <h1 class="box-title">Date:{{date("d/m/Y",$accident->date)}}</h1><br />
 				              <b>Injury </b><span class="label label-warning">{{$accident->injury}}</span> <b>Dead </b><span class="label bg-red">{{$accident->dead}}</span>
 
 				            </div>
@@ -41,11 +43,11 @@
 				            <div class="box-header with-border">
 				              <h3 class="box-title">Vehicle Taken During Accident Investigation</h3>
 				              <div class="btn-group pull-right">
-				                    <a href="/vehicle/{{$accident->id}}?create=new"><button type="button" class="btn btn-block btn-primary btn-flat">Add New</button></a>
+				                    <a href="/vehicle/create?id={{$accident->id}}"><button type="button" class="btn btn-block btn-primary btn-flat">Add New</button></a>
 				              </div>
 				            </div>
 				            <!-- /.box-header -->
-				            <table id="vehicles" class="display" width="100%" cellspacing="0">
+				            <table id="ids" class="display" width="100%" cellspacing="0">
 						        <thead>
 						            <tr>
 						                <th>Type</th>
@@ -59,7 +61,10 @@
 						        <tbody>
 						        	@foreach($accident->vehicles as $vehicle)
 						        		<tr>
-						        			<td>{{$vehicle->type}}</td>
+						        			<td>{{$vehicle->type ==1 ? 'Car' : '' }}
+						        			    {{$vehicle->type ==2 ? 'Motocycle' : '' }}
+						        			    {{$vehicle->type ==3 ? 'Bicycle' : ''}}
+						        			</td>
 						        			<td>{{$vehicle->plate}}</td>
 						        			<td>{{$vehicle->owner}}</td>
 						        			<td>{{$vehicle->amande}}</td>
@@ -114,7 +119,11 @@
 						        <tbody>
 						        	@foreach($accident->identifications as $id)
 						        		<tr>
-						        			<td>{{$id->type}}</td>
+						        			<td>
+						        				{{$id->type==1 ? 'Driving Licence' :''}}
+						        				{{$id->type==2 ? 'Immatriculation Card' :''}}
+						        				{{$id->type==3 ? 'Insurance' :''}}
+						        			</td>
 						        			<td>{{$id->number}}</td>
 						        			<td>{{$id->owner}}</td>
 						        			@if($id->status == 1)
@@ -176,11 +185,7 @@
 	setTimeout(function(){
 		$('#vehicles').DataTable();
 	},5000);
-	var hold=document.getElementsByClassName('hold')
-	for(var index=0;index < hold.length;index++)
-	{
-		hold[index].addEventListener('click',function(){
-			alert('hello')
-		})
-	}
+	setTimeout(function(){
+		$('#ids').DataTable();
+	},5000);
 </script>

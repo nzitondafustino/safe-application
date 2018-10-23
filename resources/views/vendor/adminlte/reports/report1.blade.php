@@ -1,7 +1,24 @@
-<h2>
-	{{$user->station->name}} Police Station<br />
-	{{$title}}<br />
-	{{$date}}<br />
+
+<h1> Republic of Rwanda<br>
+    {{Auth::user()->province->name}} Province<br>
+    {{Auth::user()->district->name}} District<br>
+    
+    @if(Auth::user()->hasAnyRole('user'))
+    {{$user->station->name}} Police Station  Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('district-admin'))
+    {{$user->district->name}}Police  Stations  Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('province-admin'))
+    {{$user->province->name}} Police Stations Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('overall-admin'))
+     All Police Stations   Accidents Summary<br />
+    @endif
+    
+
+    {{$title}}<br />
+    {{$date}}<br />
 </h2>
 <table id="accidents" class="display" style="border-collapse: collapse;" border="1" width="100%" cellspacing="0">
     <thead>
@@ -12,8 +29,6 @@
             <th>Injury</th>
             <th>Dead</th>
             <th>Vehicles</th>
-            <th>ID Owner</th>
-            <th>IDs Number</th>
         </tr>
     </thead>
     <tbody>
@@ -27,40 +42,15 @@
     			<td >{{$accident->comment}}</td>
     			<td class="text-center"><span class="label label-warning">{{$accident->injury}}</span></a></td>
     			<td class="text-center"><span class="label bg-red">{{$accident->dead}}</span></a></td>
-    			<td class="text-center">
-                    <a href="/vehicle/{{ $accident->id }}">
+    		   <td class="text-center">
                         @foreach($accident->vehicles as $vehicle)
-                        <span class="label label-primary">
-                            {{$vehicle->plate}}
-                           
-                        </span>
+                            {{ $vehicle->plate }} <br>
                         @endforeach
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="/ids/{{ $accident->id }}">
-                        @foreach($accident->identifications as $identification)
-                        <span class="label label-primary">
-                            {{ $identification->owner }} 
-                            @else
-
-                        </span>
-                        @endforeach
-                    </a>
-                </td
-    			<td class="text-center">
-                    <a href="/ids/{{ $accident->id }}">
-                        @foreach($accident->identifications as $identification)
-                        <span class="label label-primary">
-                            {{ $identification->number }} 
-                        </span>
-                        @endforeach
-                    </a>
                 </td>
     		</tr>
     	@endforeach
     </tbody>
 </table>
 <br />
-Done at <b>{{$user->station->name}}</b> on <b>{{date('Y-m-d')}}</b><br />
+Done at <b>{{$user->station->name}}</b> on <b>{{date('d/m/Y')}}</b><br />
 By <b>{{$user->name}}</b><br />

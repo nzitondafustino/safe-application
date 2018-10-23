@@ -8,6 +8,7 @@ use Exception;
 use Auth;
 use App\Accident;
 use App\Province;
+use App\Address;
 
 class AccidentController extends Controller
 {
@@ -41,6 +42,16 @@ class AccidentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'province'      =>'required',
+            'district'      =>'required',
+            'sector'        =>'required',
+            'comment'       =>'required|string',
+            'datepicker'    =>'required|date',
+            'dead'          =>'required|digits_between:1,4',
+            'injury'        =>'required|digits_between:1,4'
+
+        ]);
         //pick aall variable required
         $date = $request->datepicker;
         //var_dump($date);
@@ -51,8 +62,10 @@ class AccidentController extends Controller
 
         try{
             $accident = Accident::create(array(
-                    'address_id' => 20,
                     'user_id'    => Auth::id(),
+                    'province_id'=>$request->province,
+                    'district_id'=>$request->district,
+                    'sector_id'  =>$request->sector,
                     'comment'   => $comment,
                     'date'      => strtotime($date),
                     'dead'      => $dead,
@@ -93,7 +106,14 @@ class AccidentController extends Controller
     {
         $accident=Accident::find($id);
         $provinces=Province::all();
-        return view('adminlte::accident.edit',["accident"=>$accident,'provinces'=>$provinces]);
+        $province=$accident->province;
+        $districts=$province->districts;
+        $district=$accident->district;
+        $sectors=$district->sectors;
+        return view('adminlte::accident.edit')->with('accident',$accident)
+                                              ->with('provinces',$provinces)
+                                              ->with('districts',$districts)
+                                              ->with('sectors',$sectors);
     }
 
     /**
@@ -105,7 +125,20 @@ class AccidentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'province'      =>'required',
+            'district'      =>'required',
+            'sector'        =>'required',
+            'comment'       =>'required|string',
+            'datepicker'    =>'required|date',
+            'dead'          =>'required|digits_between:1,4',
+            'injury'        =>'required|digits_between:1,4'
+
+        ]);
         $accident=Accident::find($id);
+        $accident->province_id=$request->province;
+        $accident->district_id=$request->district;
+        $accident->sector_id=$request->sector;
         $accident->comment=$request->comment;
         $accident->date=$request->date;
         $accident->dead=$request->dead;

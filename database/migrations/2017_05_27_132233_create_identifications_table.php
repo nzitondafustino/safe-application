@@ -26,7 +26,8 @@ class CreateIdentificationsTable extends Migration
             
             $table->double('amande');
 
-            $table->timestamps();
+            $table->timestamp('created_on')->nullable();
+            $table->timestamp('updated_on')->nullable();
             $table->foreign('accident_id')  ->  references('id') ->  on('accidents')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');

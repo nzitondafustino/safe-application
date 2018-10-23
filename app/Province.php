@@ -1,8 +1,10 @@
 <?php
 
 namespace App;
-use District;
-use Address;
+use App\District;
+use App\Address;
+use App\User;
+use App\Accident;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,8 +14,19 @@ class Province extends Model
     {
     	return $this->hasMany(District::class);
     }
-    public function addresses()
+    public function accidents()
     {
-    	return $this->hasMany(Address::class);
+        return $this->hasMany(Accident::class);
+    }
+    public function users()
+    {
+    	return $this->hasMany(User::class);
+    }
+        public function vehicles()
+    {
+        return $this->hasManyThrough('App\Vehicle','App\User');
+    }
+    public function identifications(){
+        return $this->hasManyThrough('App\ID','App\User');
     }
 }

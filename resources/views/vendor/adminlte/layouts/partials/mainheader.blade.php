@@ -6,7 +6,7 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>S</b>App</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>SAFE</b>App</span>
+        <span class="logo-lg"><b>Accident</b> M.App</span>
     </a>
 
     <!-- Header Navbar -->

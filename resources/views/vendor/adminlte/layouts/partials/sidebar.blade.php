@@ -35,7 +35,25 @@
             <li class="active"><a href="{{ url('home') }}"><i class='fa fa-home'></i> <span>{{ trans('adminlte_lang::message.home') }}</span></a></li>
             <!-- <li><a href="#"><i class='fa fa-car'></i> <span>Vehicles</span></a></li>
             <li><a href="#"><i class='fa fa-id-card-o'></i> <span>Identification Card</span></a></li> -->
+            @if(Auth::user()->hasAnyRole('user'))
             <li><a href="{{ url('report') }}"><i class='fa fa-list-ul'></i> <span>Report</span></a></li>
+            @endif
+            @if(Auth::user()->hasAnyRole('district-admin'))
+            <li><a href="{{ url('district/report') }}"><i class='fa fa-list-ul'></i> <span>Report</span></a></li>
+            @endif
+            @if(Auth::user()->hasAnyRole('province-admin'))
+            <li><a href="{{ url('province/report') }}"><i class='fa fa-list-ul'></i> <span>Report</span></a></li>
+            @endif
+            @if(Auth::user()->hasAnyRole('overall-admin'))
+            <li><a href="{{ url('overall/report') }}"><i class='fa fa-list-ul'></i> <span>Report</span></a></li>
+            @endif
+            @if(Auth::user()->hasAnyRole('overall-admin'))
+            <li><a href="{{ url('users') }}"><i class='fa fa-users'></i> <span>manage Users</span></a></li>
+            <li><a href="{{ url('districts') }}"><i class='fa fa-area-chart'></i> <span>manage Districts</span></a></li>
+            <li><a href="{{ url('sectors') }}"><i class='fa fa-area-chart'></i> <span>manage Sectors</span></a></li>
+            <li><a href="{{ url('stations') }}"><i class='fa fa-area-chart'></i> <span>manage Stations</span></a></li>
+            @endif
+            <li><a href="{{ route('users.show',Auth::id()) }}"><i class='fa fa-user'></i> <span>My Profile</span></a></li>
             <!-- <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">

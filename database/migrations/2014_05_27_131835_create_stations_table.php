@@ -18,8 +18,6 @@ class CreateStationsTable extends Migration
             $table->integer('district_id')->unsigned();
             $table->string('name');
             $table->timestamps();
-
-            $table->unique('name');
         });
     }
 

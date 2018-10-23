@@ -30,7 +30,7 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="skin-blue sidebar-mini">
-<div id="app" v-cloak>
+<div >
     <div class="wrapper">
 
     @include('adminlte::layouts.partials.mainheader')
@@ -58,6 +58,5 @@ desired effect
 @section('scripts')
     @include('adminlte::layouts.partials.scripts')
 @show
-
 </body>
 </html>

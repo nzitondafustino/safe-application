@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserAccess
 {
@@ -17,15 +18,15 @@ class UserAccess
     {
         if($request->user()===null)
         {
-            return response('UnAuthorized Access',401);
+            return redirect()->back();
         }
         $action=$request->route()->getAction();
         $roles=isset($action['roles']) ? $action['roles'] : null;
         if($request->user()->hasAnyRole($roles) || !$roles)
         {
-           return 'Authorized';
+           return $next($request);
         }
-           return response('UnAuthorized Access',401);
+           return redirect()->back();
         
     }
 }

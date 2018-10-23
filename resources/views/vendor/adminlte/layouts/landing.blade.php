@@ -45,19 +45,15 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><b>Safe App</b></a>
+                <a class="navbar-brand"><b>Accident managent System</b></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#home" class="smoothScroll">{{ trans('adminlte_lang::message.home') }}</a></li>
-                    <!-- <li><a href="#desc" class="smoothScroll">{{ trans('adminlte_lang::message.description') }}</a></li>
-                    <li><a href="#showcase" class="smoothScroll">{{ trans('adminlte_lang::message.showcase') }}</a></li> -->
-                    <li><a href="#contact" class="smoothScroll">{{ trans('adminlte_lang::message.contact') }}</a></li>
+                    <li class="active"><a href="/" class="smoothScroll">{{ trans('adminlte_lang::message.home') }}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">{{ trans('adminlte_lang::message.login') }}</a></li>
-                        <li><a href="{{ url('/register') }}">{{ trans('adminlte_lang::message.register') }}</a></li>
                     @else
                         <li><a href="/home">{{ Auth::user()->name }}</a></li>
                     @endif
@@ -72,9 +68,9 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
             <div class="container">
                 <div class="row centered">
                     <div class="col-lg-12">
-                        <h1>Safe <b><a href="#">App</a></b></h1>
+                        <h1>Accident Managment <b><a>System</a></b></h1>
                         <h3>One earnest worker can do more by personal suggestion to prevent accidents than a carload of safety signs. </h3>
-                        <h3><a href="{{ url('/register') }}" class="btn btn-lg btn-success">{{ trans('adminlte_lang::message.gedstarted') }}</a></h3>
+                        <h3><a href="{{ url('/login') }}" class="btn btn-lg btn-success">Login</a></h3>
                     </div>
                     <div class="col-lg-8">
                         <img class="img-responsive" style="opacity: 0.5" src="{{ asset('/img/bg1.jpg') }}" alt="">
@@ -83,31 +79,14 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
             </div> <!--/ .container -->
         </div><!--/ #headerwrap -->
     </section>
-
-    <section id="contact" name="contact">
-        <div id="footerwrap">
-            <div class="container">
-                <div class="col-lg-5">
-                    <h3>{{ trans('adminlte_lang::message.address') }}</h3>
-                    <p>
-                        Av. Kigali city ,<br/>
-                        Muhima,<br/>
-                        90873<br/>
-                        Rwanda
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
     <footer>
         <div id="c">
             <div class="container">
                 <p>
-                    <a href='/#home'>Home</a> | <a href='/#contact'>Contact</a><br />
-                    <strong>Copyright &copy; 2017 <a href="http://www.rtb.com">rtb.org</a>.</strong>
+                    <a href='/'>Home</a><br />
+                    <strong>Copyright &copy; 2018</strong>
                     <br/>
-                    Safe App {{ trans('adminlte_lang::message.createdby') }} Callixte HABARUGABA
+                    A.M.S {{ trans('adminlte_lang::message.createdby') }} Innocent RUKUNDO
                     <br/>
                 </p>
 

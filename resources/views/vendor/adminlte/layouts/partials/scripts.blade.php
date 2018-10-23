@@ -8,6 +8,10 @@
 <script src="/plugins/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="/js/my_script.js" type="text/javascript"></script>
 <script src="/js/jquery.dataTables.js" type="text/javascript"></script>
+<script src="/js/date.js"></script>
+<script src="/js/register.js"></script>
+<script src="/js/parsley.min.js"></script>
+
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the

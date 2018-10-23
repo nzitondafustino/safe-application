@@ -16,9 +16,9 @@
 						<div class="col-sm-12">
 							<div class="btn-group pull-right">
 			                    <a href="/accident/create"><button type="button" class="btn btn-block btn-primary btn-flat">New Accident</button></a>
-			                </div>
 			            </div>
 			        </div>
+			    </div>
 					
 					<div class="box-body">
 						<table id="accidents" class="display" width="100%" cellspacing="0">
@@ -38,7 +38,7 @@
 					        	@foreach($accidents as $accident)
 					        		<tr>
 					        			<td>{{$accident->id}}</td>
-					        			<td>{{$accident->date}}</td>
+					        			<td>{{date("d/m/Y",$accident->date)}}</td>
 					        			<td>{{$accident->comment}}</td>
 					        			<td class="text-center"><span class="label label-warning">{{$accident->injury}}</span></a></td>
 					        			<td class="text-center"><span class="label bg-red">{{$accident->dead}}</span></a></td>

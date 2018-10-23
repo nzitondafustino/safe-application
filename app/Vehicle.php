@@ -8,15 +8,11 @@ class Vehicle extends Model
 {
     //
 
+    const CREATED_AT='created_on';
+    const UPDATED_AT='updated_on';
     protected $fillable = [
         'accident_id', 'user_id', 'type', 'mark', 'category', 'plate', 'shasis', 'status', 'amande', 'owner'
     ];
-    protected $dateFormat = 'U';
-
-	
-	protected function getDateFormat() {
-	    return 'U';
-	}
 	public function accident()
 	{
 		return $this->belongsTo('App\Accident');

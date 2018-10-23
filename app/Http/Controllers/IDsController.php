@@ -42,6 +42,15 @@ class IDsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'accident'      =>'required|digits:1',
+            'IdsType'      =>'required|digits:1',
+            'status'        =>'required|digits:1',
+            'cardNo'    =>'required|alpha_num',
+            'owner'     =>'required|string',
+            'amande'        =>'required|digits_between:1,10',
+
+        ]);
         $accidentId=$request->accident;
         $id=new ID();
         $id->accident_id=$accidentId;
@@ -96,7 +105,14 @@ class IDsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {   $this->validate($request,[
+            'IdsType'      =>'required|digits:1',
+            'status'        =>'required|digits:1',
+            'cardNo'    =>'required|alpha_num',
+            'owner'     =>'required|string',
+            'amande'        =>'required|digits_between:1,10',
+
+        ]);
         $id=ID::find($id);
         $id->type=$request->IdsType;
         $id->status=$request->status;

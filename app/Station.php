@@ -11,4 +11,8 @@ class Station extends Model
     {
     	return $this->hasMany(User::class);
     }
+        public function district()
+    {
+    	return $this->belongsTo('App\District');
+    }
 }

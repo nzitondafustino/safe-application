@@ -15,7 +15,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- form start -->
-				            <form class="form-horizontal" method="post" action="/accident">
+				            <form class="form-horizontal" method="get" name="myForm">
 				            	{{ csrf_field() }}
 				            	<div class="row">
 					            	<div class="col-sm-5">
@@ -62,7 +62,7 @@
 				            <div class="info-box-content">
 				              <span class="info-box-text">Accidents</span>
 				              <span class="info-box-number" id="accidents">{{$accidents}}</span>
-				              <span id="accidentsprint"><a href="/reports/print/1?startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i> Print</a></span>
+				              <span id="accidentsprint"><a id="accident" href="/reports/print/1?" target="_blank"><i class="glyphicon glyphicon-print"></i> Print</a></span>
 				            </div>
 				            <!-- /.info-box-content -->
 				          </div>
@@ -118,7 +118,7 @@
 
 					            <div class="info-box-content">
 					              <span class="info-box-text">Cars</span>
-					              <span class="info-box-number" id="cars">{{$cars}} <span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=1&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
+					              <span class="info-box-number" id="cars">{{$cars}} <span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=1" id="car" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
 
 
 					              <div class="progress">
@@ -145,7 +145,7 @@
 
 					            <div class="info-box-content">
 					              <span class="info-box-text">MotoCycle</span>
-					              <span class="info-box-number" id="motocycle">{{$motocycle}} <span id=""><a style="color:#fff;" href="/reports/print/2?type=2&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
+					              <span class="info-box-number" id="motocycle">{{$motocycle}} <span ><a style="color:#fff;" id="moto" href="/reports/print/2?type=2" class="getdate" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
 
 					              <div class="progress">
 					                <div class="progress-bar" id="barMotocycle" style="width: {{$per = round(($motocycle * 100)/($sum), 1)}}%"></div>
@@ -165,7 +165,7 @@
 
 					            <div class="info-box-content">
 					              <span class="info-box-text">Bycles</span>
-					              <span class="info-box-number" id="bicycle">{{$bicycle}} <span id=""><a style="color:#fff;" href="/reports/print/2?type=3&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
+					              <span class="info-box-number" id="bicycle">{{$bicycle}} <span id=""><a style="color:#fff;" id="bicycle"  href="/reports/print/2?type=3" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span></span>
 
 					              <div class="progress">
 					                <div class="progress-bar" id="barBicycle" style="width: {{$per = round(($bicycle * 100)/($sum), 1)}}%"></div>
@@ -179,7 +179,7 @@
 					          <!-- /.info-box -->
 					        </div>
 					        <div class="col-md-3">
-					        	<a class="btn btn-primary" href="/reports/print/2?type=4&startdate={{$startDate}}&enddate={{$endDate}}">Generate  Vehicles Report</a>
+					        	<a class="btn btn-primary" id="vehicles" href="/reports/print/2?type=4" id="vehicles">Generate  Vehicles Report</a>
 
 					        </div>
 					        <!-- /.col -->
@@ -192,8 +192,6 @@
 	
 	<div class="container-fluid spark-screen">
 		<div class="row">
-			<input type="hidden" name="startDate" id="startDateInput" value="{{$startDate}}">
-			<input type="hidden" name="endDate" id="endDateInput" value="{{$endDate}}">
 			<div class="col-md-12">
 				<div class="box" style="padding: 6px;">
 					<div class="box-body">
@@ -209,7 +207,7 @@
 					            <div class="icon">
 					              <i class="fa fa-credit-card"></i>
 					            </div>
-					            <a href="/reports/print/3?type=1&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank" onclick="$(this).attr('href', '/reports/print/3?type=1&startdate=' + $('#startDateInput').val() + '&enddate=' + $('#endDateInput').val());" class="small-box-footer">
+					            <a  href="/reports/print/3?type=1" target="_blank" id="licence" class="small-box-footer getdate">
 					              Print <i class="fa fa-arrow-circle-right"></i>
 					            </a>
 					          </div>
@@ -226,7 +224,7 @@
 					            <div class="icon">
 					              <i class="fa fa-credit-card"></i>
 					            </div>
-					            <a href="/reports/print/3?type=2&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank" onclick="$(this).attr('href', '/reports/print/3?type=2&startdate=' + $('#startDateInput').val() + '&enddate=' + $('#endDateInput').val());" class="small-box-footer">
+					            <a href="/reports/print/3?type=2" target="_blank" id="immatri" class="small-box-footer getdate">
 					              Print <i class="fa fa-arrow-circle-right"></i>
 					            </a>
 					          </div>
@@ -243,13 +241,13 @@
 					            <div class="icon">
 					              <i class="fa fa-credit-card"></i>
 					            </div>
-					            <a href="/reports/print/3?type=3&startdate={{$startDate}}&enddate={{$endDate}}" target="_blank" onclick="$(this).attr('href', '/reports/print/3?type=3&startdate=' + $('#startDateInput').val() + '&enddate=' + $('#endDateInput').val());" class="small-box-footer">
+					            <a href="/reports/print/3?type=3" target="_blank" id="insurence" class="small-box-footer getdate">
 					              Print <i class="fa fa-arrow-circle-right"></i>
 					            </a>
 					          </div>
 					        </div>
 					         <div class="col-lg-3">
-					          <a class="btn btn-primary" href="/reports/print/3?type=4&startdate={{$startDate}}&enddate={{$endDate}}">Generate Documents Report</a>
+					          <a class="btn btn-primary getdate" id="documents" href="/reports/print/3?type=4">Generate Documents Report</a>
 					      </div>
 
 					        <!-- ./col -->
@@ -259,45 +257,4 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<script type="text/javascript">
-		setTimeout(function(){
-			$("#generate").click(function(){
-				var url = "/report/1?startDate=" + $("#datepicker1").val() + "&endDate=" + $("#datepicker2").val();
-  				$.getJSON(url, function(data){
-  					//console.log(data);
-  					$("#startDateInput").val(data.startDate);
-  					$("#endDateInput").val(data.endDate);
-  					$("#accidents").html(data.accidents);
-  					$("#accidentsprint").html('<a href="/reports/print/1?startdate=' + data.startDate  + '&enddate=' + data.endDate  + '" target="_blank"><i class="glyphicon glyphicon-print"></i> Print</a>');
-  					//$("#carsprint").html('<a href="/reports/print/2?startdate=' + data.startDate  + '&enddate=' + data.endDate  + '" target="_blank"><i class="glyphicon glyphicon-print"></i> Print</a>');
-  					$("#injury").html(data.injury);
-  					$("#dead").html(data.dead);
-
-  					var sum = (data.cars * 1) + (data.motocycle * 1) + (data.bicycle*1);
-  					if(sum == 0){
-  						sum = 1;
-  					}
-  					var per = Math.round(data.cars*100/sum);
-  					$("#barCarsDesc").html( per + "% Of Vehicles");
-  					$("#barCars").css("width", per+"%");
-  					var per = Math.round(data.motocycle*100/sum);
-  					$("#barMotocycleDesc").html( per + "% Of Vehicles");
-  					$("#barMotocycle").css("width", per+"%");
-  					var per = Math.round(data.bicycle*100/sum);
-  					$("#barBicycleDesc").html( per + "% Of Vehicles");
-  					$("#barBicycle").css("width", per+"%");
-  					//console.log(per);
-
-  					$("#cars").html(data.cars + '&nbsp;<span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=1&startdate=' + data.startDate  + '&enddate=' + data.endDate  + '" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span>');
-  					$("#motocycle").html(data.motocycle + '&nbsp;<span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=2&startdate=' + data.startDate  + '&enddate=' + data.endDate  + '" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span>');
-  					$("#bicycle").html(data.bicycle + '&nbsp;<span id="carsprint"><a style="color:#fff;" href="/reports/print/2?type=3&startdate=' + data.startDate  + '&enddate=' + data.endDate  + '" target="_blank"><i class="glyphicon glyphicon-print"></i></a></span>');
-
-  					$("#License").html(data.license);
-  					$("#Immatriculation").html(data.matriculation);
-  					$("#Insurance").html(data.insurance);
-  				});
-			});
-		},5000);
-	</script>
 @endsection

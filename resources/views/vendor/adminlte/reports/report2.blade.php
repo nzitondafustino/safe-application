@@ -1,8 +1,28 @@
-<h2>
-	{{$user->station->name}} Police Station<br />
-	{{$title}}<br />
-	{{$date}}<br />
+
+<h1> Republic of Rwanda<br>
+    {{Auth::user()->province->name}} Province<br>
+    {{Auth::user()->district->name}} District<br>
+    
+    @if(Auth::user()->hasAnyRole('user'))
+    {{$user->station->name}} Police Station  Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('district-admin'))
+    {{$user->district->name}}Police  Stations  Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('province-admin'))
+    {{$user->province->name}} Police Stations Accidents Summary<br />
+    @endif
+    @if(Auth::user()->hasAnyRole('overall-admin'))
+     All Police Stations   Accidents Summary<br />
+    @endif
+    
+
+    {{$title}}<br />
+    {{$date}}<br />
 </h2>
+<?php
+$penalty=0;
+?>
 <table id="accidents" class="display" style="border-collapse: collapse;" border="1" width="100%" cellspacing="0">
     <thead>
         <tr>
@@ -15,24 +35,26 @@
     </thead>
     <tbody>
         @foreach($vehicles as $vehicle)
+         <?php $penalty+=(int)$vehicle->amande ?>
             <tr>
-                <td>{{$vehicle->type}}</td>
-                <td>{{$vehicle->plate}}</td>
+                <td>
+                    {{$vehicle->type==1?'Car':''}}
+                    {{$vehicle->type==2?'Motocycle':''}}
+                    {{$vehicle->type==3?'Bicycle':''}}
+                </td>
+                <td>{{$vehicle->plate}}
+                </td>
                 <td>{{$vehicle->owner}}</td>
                 <td>{{$vehicle->amande}}</td>
-                @if($vehicle->status == 1)
-                    <td><a href="#" onclick="$('#rowidH').val('{{ $vehicle->id }}');$('#myModalLabel4').html('{{ $vehicle->type }} {{ $vehicle->plate }} is Hold')" data-toggle="modal" data-target="#hold"><small class="label pull-center bg-red">Hold</small></a></td>
-                @endif
-                @if($vehicle->status == 2)
-                    <td><a href="#" onclick="$('#rowidR').val('{{ $vehicle->id }}');$('#myModalLabel3').html('{{ $vehicle->type }} {{ $vehicle->plate }} is Released')" data-toggle="modal" data-target="#released"><small class="label pull-center bg-green">Released</small></a></td>
-                @endif
-                @if($vehicle->status == 3)
-                    <td><a href="#" onclick="$('#rowid').val('{{ $vehicle->id }}');$('#myModalLabel2').html('{{ $vehicle->type }} {{ $vehicle->plate }} is transfered')" data-toggle="modal" data-target="#transfered"><small class="label label-warning pull-center">Transfered</small></td>
-                @endif
+                <td>{{$vehicle->status==1?'Hold':''}}
+                    {{$vehicle->status==2?'Released':''}}
+                    {{$vehicle->status==3?'Transfer to the court':''}}
+                </td>
             </tr>
         @endforeach
     </tbody>
 </table>
+<h3>Total penalty:{{$penalty}} RwF</h3>
 <br />
-Done at <b>{{$user->station->name}}</b> on <b>{{date('Y-m-d')}}</b><br />
+Done at <b>{{$user->station->name}}</b> on <b>{{date('d/m/Y')}}</b><br />
 By <b>{{$user->name}}</b><br />

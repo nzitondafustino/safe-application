@@ -15,8 +15,21 @@ class CreateAccidentsTable extends Migration
     {
         Schema::create('accidents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('address_id')->unsigned();
             $table->integer('user_id')->unsigned();
+            $table->integer('province_id')->unsigned();
+            $table->integer('district_id')->unsigned();
+            $table->integer('sector_id')->unsigned();
+
+            
+            $table->foreign('province_id')   ->  references('id') ->  on('provinces')
+                                                                ->  onDelete('restrict')
+                                                                ->  onUpdate('cascade');
+            $table->foreign('district_id')   ->  references('id')->  on('districts')
+                                                                ->  onDelete('restrict')
+                                                                ->  onUpdate('cascade');
+            $table->foreign('sector_id')   ->  references('id')  ->  on('sectors')
+                                                                ->  onDelete('restrict')
+                                                                ->  onUpdate('cascade');
             $table->string('comment');
 
             $table->integer('status')->default(1)->comment('1.active 2.transmitted 3.closed');
@@ -27,9 +40,6 @@ class CreateAccidentsTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('address_id')   ->  references('id') ->  on('addresses')
-                                                                ->  onDelete('restrict')
-                                                                ->  onUpdate('cascade');
             $table->foreign('user_id')   ->  references('id')    ->  on('users')
                                                                 ->  onDelete('restrict')
                                                                 ->  onUpdate('cascade');

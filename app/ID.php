@@ -7,17 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class ID extends Model
 {
-    //
+    const CREATED_AT='created_on';
+    const UPDATED_AT='updated_on';
     protected $table="identifications";
     protected $fillable = [
         'accident_id', 'user_id', 'type', 'number', 'owner', 'category', 'status', 'amande'
     ];
-    protected $dateFormat = 'U';
-
-	
-	protected function getDateFormat() {
-	    return 'U';
-	}
 	public function accident()
 	{
 		return $this->belongsTo('App\Accident');

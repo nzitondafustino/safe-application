@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Accident;
 use App\Station;
 use App\Role;
+use App\District;
+use App\Province;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -29,12 +31,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    protected $dateFormat = 'U';
 
-    
-    protected function getDateFormat() {
-        return 'U';
-    }
     public function accidents()
     {
         return $this->hasMany(Accident::class);
@@ -45,22 +42,24 @@ class User extends Authenticatable
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany('App\Role','role_user','user_id','role_id');
     }
-        public function hasAnyRole($roles)
+    public function hasAnyRole($roles)
     {
         if(is_array($roles))
         {
-            foreach ($roles as $role) 
+            foreach($roles as $role)
             {
-             if ($this->hasRole($role)) 
-             {
-                return true;
-             }
+                if($this->hasRole($role))
+                {
+                    return true;
+                }
             }
         }
-        else {
-            if ($this->hasRole($roles)) {
+        else
+         {
+            if($this->hasRole($roles))
+            {
                 return true;
             }
         }
@@ -68,10 +67,18 @@ class User extends Authenticatable
     }
     public function hasRole($role)
     {
-       if($this->roles()->where('name',$role)->first())
-       {
-        return true;
-       }
-       return false;
+        if($this->roles()->where('name',$role)->first())
+        {
+            return true;
+        }
+        return false;
+    }
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
     }
 }

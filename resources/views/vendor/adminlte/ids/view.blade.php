@@ -17,10 +17,12 @@
 				              	<div class="btn-group pull-right">
 				                    <a href="/home"><button type="button" class="btn btn-block btn-primary btn-flat">Home</button></a>
 				              	</div>
-				              	<h1 class="box-title">{{$accident->comment}}</h1><br />
-				              	<h1 class="box-title">{{-- {{$accident->address}} --}}</h1><br />
-				              	<h1 class="box-title">{{$accident->date}}</h1><br />
-				              	<b>Injury </b><span class="label label-warning">{{$accident->injury}}</span> <b>Dead </b><span class="label bg-red">{{$accident->dead}}</span>
+				              <h1 class="box-title">Comment:{{$accident->comment}}</h1><br />
+				              <h1 class="box-title">Province:{{$accident->province->name}}</h1><br />
+				              <h1 class="box-title">District:{{$accident->district->name}}</h1><br />
+				              <h1 class="box-title">Sector:{{$accident->sector->name}}</h1><br />
+				              <h1 class="box-title">Date:{{date("d/m/Y",$accident->date)}}</h1><br />
+				              <b>Injury </b><span class="label label-warning">{{$accident->injury}}</span> <b>Dead </b><span class="label bg-red">{{$accident->dead}}</span>
 				            </div>
 				        </div>
 				    </div>
@@ -45,14 +47,7 @@
 				              	<h4>Penalty:{{$id->amande}}</h4>
 				              	<h4>
 				              		<a class="btn btn-warning" href="{{route('ids.edit',$id->id)}}">Edit</a>
-				              		<a class="btn btn-danger" href="{{route('ids.destroy',$id->id)}}">Delete</a
 				              	</h4>
-				              	<h1>Officer Identification</h1>
-				              	<h4>Name:{{$user->name}}</h4>
-				              	<h4>E-mail:{{$user->email}}</h4>
-				              	<h4>Lanker:{{$user->title}}</h4>
-				              	<h4>Phone:{{$user->phone}}</h4>
-				              	<h4>station:{{$user->station->name}}</h4>
 
 
 				        </div>
@@ -63,13 +58,4 @@
 		
 	</div>   
 @endsection
-<script type="text/javascript">
-	setTimeout(function(){
-		activateNewAccidentForm();
-	}, 1000);
-</script>
-<script type="text/javascript">
-	setTimeout(function(){
-		$('#vehicles').DataTable();
-	},5000);
 </script>

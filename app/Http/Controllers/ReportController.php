@@ -22,32 +22,49 @@ class ReportController extends Controller
      */
     public function index()
     {
-        $accidents=Accident::all();
+        $startDate  = strtotime(date("Y-m-01", time() ));
+        $endDate    = time();
+        $datestart=date('Y-m-d',$startDate);
+        $dateend=date('Y-m-d',$endDate);
+        $accidents=Accident::where('user_id',Auth::id())
+                            ->whereDate('created_at','>=',$datestart)
+                            ->whereDate('created_at','<=',$dateend)
+                            ->get();;
         $totalAccident=$accidents->count();
         $user=User::find(Auth::id());
         $station=$user->station;
-        $startDate  = strtotime(date("Y-m-01", time() ));
-        $endDate    = time();
         $injury=$accidents->sum('injury');
         $dead=$accidents->sum('dead');
-        $holdCars=Vehicle::where('status',1)
-                        ->where('type',1)
-                        ->get()->count();
-        $holdMotocycle=Vehicle::where('status',1)
-                        ->where('type',2)
-                         ->get()->count();
-        $holdBicycle=Vehicle::where('status',1)
-                        ->where('type',3)
-                         ->get()->count();
-        $holdLicense=ID::where('type',1)
-                           ->get()
-                           ->count();
-        $holdMatriculation=ID::where('type',2)
-                           ->get()
-                           ->count();
-        $holdInsurance=ID::where('type',3)
-                           ->get()
-                           ->count();          
+        $holdCars=Vehicle::where('type',1)->where('user_id',Auth::id())
+                             ->whereDate('created_on','>=',$datestart)
+                             ->whereDate('created_on','<=',$dateend)
+                             ->get()
+                             ->count();
+        $holdMotocycle=Vehicle::where('type',2)->where('user_id',Auth::id())
+                              ->whereDate('created_on','>=',$datestart)
+                              ->whereDate('created_on','<=',$dateend)
+                              ->get()
+                              ->count();
+        $holdBicycle=Vehicle::where('type',3)->where('user_id',Auth::id())
+                              ->whereDate('created_on','>=',$datestart)
+                              ->whereDate('created_on','<=',$dateend)
+                              ->get()
+                              ->count();
+        $holdLicense=ID::where('type',1)->where('user_id',Auth::id())
+                              ->whereDate('created_on','>=',$datestart)
+                              ->whereDate('created_on','<=',$dateend)
+                              ->get()
+                              ->count();
+        $holdMatriculation=ID::where('type',2)->where('user_id',Auth::id())
+                              ->whereDate('created_on','>=',$datestart)
+                              ->whereDate('created_on','<=',$dateend)
+                              ->get()
+                              ->count();
+        $holdInsurance=ID::where('type',3)->where('user_id',Auth::id())
+                               ->whereDate('created_on','>=',$datestart)
+                               ->whereDate('created_on','<=',$dateend)
+                               ->get()
+                               ->count();          
         return view('adminlte::report.show')->with('accidents',$totalAccident)
                                             ->with('injury',$injury)
                                             ->with('dead',$dead)
@@ -77,14 +94,19 @@ class ReportController extends Controller
             $startDate = $endDate;
             $endDate = $t;
         }
+        $datestart=date('Y-m-d',$startDate);
+        $dateend=date('Y-m-d',$endDate);
       if($reportId==1)
          {
-          $accidents=Accident::where('user_id',Auth::id())->get();
+          $accidents=Accident::where('user_id',Auth::id())
+                            ->whereDate('created_at','>=',$datestart)
+                            ->whereDate('created_at','<=',$dateend)
+                            ->get();
           $pdf = PDF::loadHTML(view('adminlte::reports.report1')
                                     ->with('accidents',$accidents)
                                     ->with('user',$user)
                                     ->with('title',"Accident Summary Report")
-                                    ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate))
+                                    ->with('date',"From ".date("d/m/Y", $startDate)." To ".date("d/m/Y", $endDate))
                                     );
             return $pdf->stream('homw.pdf');
 
@@ -93,71 +115,83 @@ class ReportController extends Controller
          {        
                   $vehicleType="Car Accident Report";
                   $vehicles=Vehicle::where('user_id',Auth::id())
-                                                       ->where('type',1)
-                                                       ->get();
+                                    ->where('type',1)
+                                    ->whereDate('created_on','>=',$datestart)
+                                    ->whereDate('created_on','<=',$dateend)
+                                    ->get();
                  if($request->type==2)
                  {
                  $vehicles=Vehicle::where('user_id',Auth::id())
-                                                       ->where('type',2)
-                                                       ->get();
+                                     ->where('type',2)
+                                     ->whereDate('created_on','>=',$datestart)
+                                     ->whereDate('created_on','<=',$dateend)
+                                     ->get();
                  $vehicleType="Motocycle Accident Report";
                  }
                  elseif($request->type==3)
                  {
                   $vehicles=Vehicle::where('user_id',Auth::id())
-                                                       ->where('type',3)
-                                                       ->get();
+                                      ->where('type',3)
+                                      ->whereDate('created_on','>=',$datestart)
+                                      ->whereDate('created_on','<=',$dateend)
+                                      ->get();
                  $vehicleType="Bicycle Accident Report";
                  }
                  elseif($request->type==4)
                  {
                  $vehicles=Vehicle::where('user_id',Auth::id())
-                                                       ->get();
+                                      ->whereDate('created_on','>=',$datestart)
+                                      ->whereDate('created_on','<=',$dateend)
+                                      ->get();
                  $vehicleType="Vehicle Accident Report"; 
                  }
                  $pdf = PDF::loadHTML(view('adminlte::reports.report2')
                                  ->with('vehicles',$vehicles)
                                  ->with('user',$user)
                                  ->with('title',$vehicleType)
-                                 ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate)));
+                                 ->with('date',"From ".date("d/m/Y", $startDate)." To ".date("d/m/Y", $endDate)));
                 return $pdf->stream('homw.pdf');
         }
         elseif($reportId==3)
                  $title="Licence Summary Report";
                  $ids=ID::where('user_id',Auth::id())
-                                              ->where('type',1)
-                                              ->get();
+                                 ->where('type',1)
+                                 ->whereDate('created_on','>=',$datestart)
+                                 ->whereDate('created_on','<=',$dateend)
+                                 ->get();
                  if($request->type==2)
                  {
                  $title="Immatriculation Summary Report";
                  $ids=ID::where('user_id',Auth::id())
-                                            ->where('type',2)
-                                            ->get();
+                                 ->where('type',2)
+                                 ->whereDate('created_on','>=',$datestart)
+                                 ->whereDate('created_on','<=',$dateend)
+                                 ->get();
                  }
                  elseif($request->type==3)
                  {
                  $title="Insurance Summary Report";
                  $ids=ID::where('user_id',Auth::id())
-                                            ->where('type',2)
-                                            ->get();
+                                 ->where('type',2)
+                                 ->whereDate('created_on','>=',$datestart)
+                                 ->whereDate('created_on','<=',$dateend)
+                                 ->get();
                  }
                  elseif($request->type==4)
                  {
                  $title="Documents Summary Report";
                  $ids=ID::where('user_id',Auth::id())
-                                            ->get();  
+                                ->whereDate('created_on','>=',$datestart)
+                                ->whereDate('created_on','<=',$dateend)
+                                ->get();  
                  }
                  $pdf = PDF::loadHTML(view('adminlte::reports.report3')
                                  ->with('ids',$ids)
                                  ->with('user',$user)
                                  ->with('title',$title)
-                                 ->with('date',"From ".date("Y-m-d", $startDate)." To ".date("Y-m-d", $endDate))
+                                 ->with('date',"From ".date("d/m/Y", $startDate)." To ".date("d/m/Y", $endDate))
                                  );
          return $pdf->stream('homw.pdf');
-    }
-    public function generalreport()
-    {
-
     }
    
 }
